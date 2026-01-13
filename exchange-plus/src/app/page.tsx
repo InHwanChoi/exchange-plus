@@ -145,16 +145,16 @@ export default function Home() {
             ))}
           </div>
           
-          <div className="px-4 mt-6 mb-4">
+          <div className="px-4 mt-4 mb-4">
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="w-full py-3 flex items-center justify-center gap-2 text-[#007AFF] hover:bg-white active:bg-[#E5E5EA] rounded-[10px] transition-colors"
+              className="w-full py-3 flex items-center justify-center gap-2 bg-white text-[#007AFF] active:bg-[#E5E5EA] rounded-xl shadow-sm transition-colors"
             >
               <Plus className="w-5 h-5" strokeWidth={2.5} />
               <span className="font-semibold text-[17px]">통화 추가</span>
             </button>
             
-            <p className="text-center text-[11px] text-[#8E8E93] mt-4">
+            <p className="text-center text-[11px] text-[#8E8E93] mt-3">
               마지막 업데이트: {lastUpdate}
             </p>
           </div>
