@@ -14,8 +14,10 @@ const AddCurrencyModal: React.FC<AddCurrencyModalProps> = ({ isOpen, onClose, on
 
   if (!isOpen) return null;
 
+  const popularCodes = ['USD', 'EUR', 'JPY', 'GBP', 'CNY', 'KRW', 'HKD', 'SGD', 'AUD', 'CAD', 'CHF', 'THB', 'VND', 'TWD'];
+  
   const filteredCodes = search.trim() === '' 
-    ? [] 
+    ? popularCodes.filter(code => availableCodes.includes(code))
     : availableCodes
         .filter(code => {
           const data = allCurrencyData[code];
@@ -82,9 +84,7 @@ const AddCurrencyModal: React.FC<AddCurrencyModalProps> = ({ isOpen, onClose, on
               <p className="text-center py-12 text-gray-400">검색 결과가 없습니다.</p>
             )}
             {search.trim() === '' && (
-              <div className="text-center py-12">
-                <p className="text-gray-400 italic">검색어를 입력해 주세요.</p>
-              </div>
+              <p className="text-center text-gray-400 text-sm pb-2">인기 통화</p>
             )}
           </div>
         </div>

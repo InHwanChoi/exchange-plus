@@ -54,10 +54,10 @@ const CurrencyRow: React.FC<CurrencyRowProps> = ({
           </div>
         </div>
 
-        <div className={`text-right transition-all duration-300 ${isSelected ? 'scale-105' : ''}`}>
-          <div className={`text-4xl font-bold tracking-tight tabular-nums ${
+        <div className={`text-right transition-all duration-300 ${isSelected ? 'scale-[1.02]' : ''}`}>
+          <div className={`text-[32px] font-bold tracking-tight tabular-nums ${
             isSelected 
-              ? 'text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 drop-shadow-sm' 
+              ? 'text-blue-600' 
               : 'text-gray-900'
           }`}>
             {value}
