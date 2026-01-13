@@ -122,11 +122,11 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[#050505] flex justify-center items-center p-0 sm:p-8 font-sans overflow-hidden">
-      <div className="w-full max-w-[480px] bg-[#0f172a] sm:rounded-[48px] shadow-2xl h-screen sm:h-[95vh] overflow-hidden border-0 sm:border-[8px] border-[#1e293b] relative flex flex-col ring-1 ring-white/5">
+    <main className="min-h-screen bg-[#f0f2f5] flex justify-center items-center p-0 sm:p-8 font-sans overflow-hidden">
+      <div className="w-full max-w-[480px] bg-white sm:rounded-[48px] shadow-2xl h-screen sm:h-[95vh] overflow-hidden border-0 sm:border-[8px] border-white relative flex flex-col ring-1 ring-black/5">
         
-        <div className="absolute top-[-20%] left-[-20%] w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none opacity-50 mix-blend-screen animate-float" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-cyan-600/10 rounded-full blur-[100px] pointer-events-none opacity-50 mix-blend-screen animate-float" style={{ animationDelay: '1.5s' }} />
+        <div className="absolute top-[-20%] left-[-20%] w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-[120px] pointer-events-none opacity-50 mix-blend-multiply animate-float" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-purple-400/10 rounded-full blur-[100px] pointer-events-none opacity-50 mix-blend-multiply animate-float" style={{ animationDelay: '1.5s' }} />
 
         <Header 
           isEditMode={isEditMode} 
@@ -134,7 +134,7 @@ export default function Home() {
         />
         
         <div className="px-6 pb-4 relative z-10 flex justify-end">
-           <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full backdrop-blur-sm border border-white/5">
+           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-100 px-3 py-1 rounded-full border border-gray-200">
              Updated: {lastUpdate}
            </p>
         </div>
@@ -157,10 +157,10 @@ export default function Home() {
           <div className="px-4 mt-2 mb-4">
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="w-full py-5 border-2 border-dashed border-white/10 rounded-3xl flex items-center justify-center gap-2 text-gray-400 hover:text-cyan-400 hover:border-cyan-500/50 hover:bg-cyan-950/20 transition-all duration-300 group"
+              className="w-full py-5 border-2 border-dashed border-gray-200 rounded-3xl flex items-center justify-center gap-2 text-gray-400 hover:text-cyan-600 hover:border-cyan-200 hover:bg-cyan-50 transition-all duration-300 group"
             >
-              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform group-hover:bg-cyan-500/20">
-                <Plus className="w-5 h-5 group-hover:text-cyan-400 transition-colors" />
+              <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center group-hover:scale-110 transition-transform group-hover:bg-cyan-100">
+                <Plus className="w-5 h-5 group-hover:text-cyan-600 transition-colors" />
               </div>
               <span className="font-bold text-sm">새 통화 추가하기</span>
             </button>

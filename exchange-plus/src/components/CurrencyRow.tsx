@@ -19,12 +19,12 @@ const CurrencyRow: React.FC<CurrencyRowProps> = ({
     <div 
       className={`relative mx-4 mb-3 rounded-2xl transition-all duration-300 transform-style-3d ${
         isSelected 
-          ? 'bg-white/10 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] scale-[1.02] ring-1 ring-white/20 z-10' 
-          : 'bg-white/5 backdrop-blur-md shadow-lg hover:bg-white/10 hover:translate-y-[-2px]'
+          ? 'bg-blue-50/80 backdrop-blur-xl shadow-[0_8px_32px_rgba(59,130,246,0.15)] scale-[1.02] ring-1 ring-blue-500/20 z-10' 
+          : 'bg-white shadow-sm hover:shadow-md hover:translate-y-[-2px]'
       }`}
       onClick={isEditMode ? undefined : onClick}
     >
-      <div className="p-4 flex items-center justify-between gap-3">
+      <div className="p-5 flex items-center justify-between gap-3">
         <div className="flex items-center gap-4">
           {isEditMode && (
             <button 
@@ -32,33 +32,33 @@ const CurrencyRow: React.FC<CurrencyRowProps> = ({
                 e.stopPropagation();
                 onDelete?.();
               }}
-              className="text-rose-500 animate-in fade-in slide-in-from-left-2 duration-200 hover:scale-110 transition-transform"
+              className="bg-red-500 hover:bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg hover:shadow-red-500/30 active:scale-95 transition-all duration-200 animate-in fade-in slide-in-from-left-2"
             >
-              <MinusCircle className="w-6 h-6 fill-rose-500/20 text-rose-500" />
+              삭제
             </button>
           )}
           
-          <div className={`w-12 h-12 rounded-full flex items-center justify-center text-3xl shadow-inner ${
-            isSelected ? 'bg-gradient-to-br from-white/20 to-transparent' : 'bg-white/5'
+          <div className={`w-14 h-14 rounded-full flex items-center justify-center text-4xl shadow-sm ${
+            isSelected ? 'bg-white' : 'bg-gray-50'
           }`}>
             {flag}
           </div>
           
           <div className="flex flex-col">
             <div className="flex items-baseline gap-2">
-              <span className={`text-xl font-bold tracking-tight ${isSelected ? 'text-white' : 'text-gray-200'}`}>
+              <span className={`text-2xl font-bold tracking-tight ${isSelected ? 'text-gray-900' : 'text-gray-900'}`}>
                 {code}
               </span>
-              <span className="text-xs font-medium text-gray-500">{symbol}</span>
+              <span className="text-sm font-medium text-gray-500">{symbol}</span>
             </div>
           </div>
         </div>
 
         <div className={`text-right transition-all duration-300 ${isSelected ? 'scale-105' : ''}`}>
-          <div className={`text-3xl font-bold tracking-tight tabular-nums ${
+          <div className={`text-4xl font-bold tracking-tight tabular-nums ${
             isSelected 
-              ? 'text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-400 drop-shadow-[0_2px_10px_rgba(6,182,212,0.3)]' 
-              : 'text-white'
+              ? 'text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 drop-shadow-sm' 
+              : 'text-gray-900'
           }`}>
             {value}
           </div>
@@ -66,7 +66,7 @@ const CurrencyRow: React.FC<CurrencyRowProps> = ({
       </div>
       
       {isSelected && (
-        <div className="absolute inset-0 rounded-2xl ring-1 ring-cyan-500/30 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-blue-500 rounded-l-2xl" />
       )}
     </div>
   );
