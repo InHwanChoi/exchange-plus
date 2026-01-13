@@ -122,25 +122,16 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[#f0f2f5] flex justify-center items-center p-0 sm:p-8 font-sans overflow-hidden">
-      <div className="w-full max-w-[480px] bg-white sm:rounded-[48px] shadow-2xl h-screen sm:h-[95vh] overflow-hidden border-0 sm:border-[8px] border-white relative flex flex-col ring-1 ring-black/5">
+    <main className="min-h-screen bg-black flex justify-center items-center sm:p-8 font-sans overflow-hidden">
+      <div className="w-full max-w-[480px] bg-[#F2F2F7] sm:rounded-[40px] shadow-2xl h-screen sm:h-[95vh] overflow-hidden border-0 sm:border-[8px] border-black relative flex flex-col">
         
-        <div className="absolute top-[-20%] left-[-20%] w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-[120px] pointer-events-none opacity-50 mix-blend-multiply animate-float" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-purple-400/10 rounded-full blur-[100px] pointer-events-none opacity-50 mix-blend-multiply animate-float" style={{ animationDelay: '1.5s' }} />
-
         <Header 
           isEditMode={isEditMode} 
           onEditToggle={() => setIsEditMode(!isEditMode)} 
         />
         
-        <div className="px-6 pb-4 relative z-10 flex justify-end">
-           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-100 px-3 py-1 rounded-full border border-gray-200">
-             Updated: {lastUpdate}
-           </p>
-        </div>
-        
-        <div className="flex-1 overflow-y-auto scrollbar-hide relative z-10 pt-2 pb-6">
-          <div className="flex flex-col">
+        <div className="flex-1 overflow-y-auto relative z-10 pt-2 pb-6">
+          <div className="flex flex-col bg-white border-y border-[rgba(60,60,67,0.12)]">
             {activeCurrencies.map(curr => (
               <CurrencyRow
                 key={curr.code}
@@ -154,16 +145,18 @@ export default function Home() {
             ))}
           </div>
           
-          <div className="px-4 mt-2 mb-4">
+          <div className="px-4 mt-6 mb-4">
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="w-full py-5 border-2 border-dashed border-gray-200 rounded-3xl flex items-center justify-center gap-2 text-gray-400 hover:text-cyan-600 hover:border-cyan-200 hover:bg-cyan-50 transition-all duration-300 group"
+              className="w-full py-3 flex items-center justify-center gap-2 text-[#007AFF] hover:bg-white active:bg-[#E5E5EA] rounded-[10px] transition-colors"
             >
-              <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center group-hover:scale-110 transition-transform group-hover:bg-cyan-100">
-                <Plus className="w-5 h-5 group-hover:text-cyan-600 transition-colors" />
-              </div>
-              <span className="font-bold text-sm">새 통화 추가하기</span>
+              <Plus className="w-5 h-5" strokeWidth={2.5} />
+              <span className="font-semibold text-[17px]">통화 추가</span>
             </button>
+            
+            <p className="text-center text-[11px] text-[#8E8E93] mt-4">
+              마지막 업데이트: {lastUpdate}
+            </p>
           </div>
           
           <AdBanner />
