@@ -122,22 +122,25 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#0B0F19] via-[#111827] to-[#0B0F19] flex justify-center items-center">
-      <div className="w-full max-w-[450px] bg-white/5 backdrop-blur-2xl flex flex-col shadow-2xl h-screen sm:h-[92vh] sm:rounded-[48px] overflow-hidden border border-white/10 relative ring-1 ring-white/5">
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-500/5 via-transparent to-purple-500/5 pointer-events-none" />
+    <main className="min-h-screen bg-[#050505] flex justify-center items-center p-0 sm:p-8 font-sans overflow-hidden">
+      <div className="w-full max-w-[480px] bg-[#0f172a] sm:rounded-[48px] shadow-2xl h-screen sm:h-[95vh] overflow-hidden border-0 sm:border-[8px] border-[#1e293b] relative flex flex-col ring-1 ring-white/5">
+        
+        <div className="absolute top-[-20%] left-[-20%] w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none opacity-50 mix-blend-screen animate-float" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-cyan-600/10 rounded-full blur-[100px] pointer-events-none opacity-50 mix-blend-screen animate-float" style={{ animationDelay: '1.5s' }} />
+
         <Header 
           isEditMode={isEditMode} 
           onEditToggle={() => setIsEditMode(!isEditMode)} 
         />
         
-        <div className="border-b border-white/5 py-2.5 relative z-10">
-          <p className="text-[10px] font-bold text-white/30 text-center uppercase tracking-widest">
-            Last Update: {lastUpdate}
-          </p>
+        <div className="px-6 pb-4 relative z-10 flex justify-end">
+           <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-full backdrop-blur-sm border border-white/5">
+             Updated: {lastUpdate}
+           </p>
         </div>
         
-        <div className="flex-1 overflow-y-auto scrollbar-hide relative z-10">
-          <div className="divide-y divide-white/5">
+        <div className="flex-1 overflow-y-auto scrollbar-hide relative z-10 pt-2 pb-6">
+          <div className="flex flex-col">
             {activeCurrencies.map(curr => (
               <CurrencyRow
                 key={curr.code}
@@ -151,20 +154,22 @@ export default function Home() {
             ))}
           </div>
           
-          <button 
-            onClick={() => setIsModalOpen(true)}
-            className="w-full py-6 flex items-center justify-center gap-2 text-cyan-400 hover:bg-white/5 transition-colors group"
-          >
-            <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Plus className="w-5 h-5 text-cyan-400" />
-            </div>
-            <span className="font-bold text-[15px]">통화 추가</span>
-          </button>
+          <div className="px-4 mt-2 mb-4">
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="w-full py-5 border-2 border-dashed border-white/10 rounded-3xl flex items-center justify-center gap-2 text-gray-400 hover:text-cyan-400 hover:border-cyan-500/50 hover:bg-cyan-950/20 transition-all duration-300 group"
+            >
+              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform group-hover:bg-cyan-500/20">
+                <Plus className="w-5 h-5 group-hover:text-cyan-400 transition-colors" />
+              </div>
+              <span className="font-bold text-sm">새 통화 추가하기</span>
+            </button>
+          </div>
           
           <AdBanner />
         </div>
 
-        <div className="border-t border-white/5 relative z-10">
+        <div className="relative z-20">
           <Keypad onKeyPress={handleKeyPress} />
         </div>
 
@@ -178,4 +183,5 @@ export default function Home() {
       </div>
     </main>
   );
+
 }
