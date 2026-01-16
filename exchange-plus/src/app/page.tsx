@@ -29,34 +29,6 @@ const DEFAULT_CURRENCIES: CurrencyItem[] = [
   { flag: '🇰🇷', code: 'KRW', symbol: '대한민국 원' },
 ];
 
-function getInitialCurrencies(): CurrencyItem[] {
-  if (typeof window === 'undefined') return DEFAULT_CURRENCIES;
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY_CURRENCIES);
-    if (stored) {
-      const parsed = JSON.parse(stored) as CurrencyItem[];
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
-      }
-    }
-  } catch { }
-  return DEFAULT_CURRENCIES;
-}
-
-function getInitialFrequency(): Record<string, number> {
-  if (typeof window === 'undefined') return {};
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY_FREQUENCY);
-    if (stored) {
-      const parsed = JSON.parse(stored) as Record<string, number>;
-      if (typeof parsed === 'object' && parsed !== null) {
-        return parsed;
-      }
-    }
-  } catch { }
-  return {};
-}
-
 export default function Home() {
   const [selectedCode, setSelectedCode] = useState('USD');
   const [inputValue, setInputValue] = useState('1');
@@ -68,8 +40,8 @@ export default function Home() {
   const [lastUpdate, setLastUpdate] = useState('...');
   const [isHydrated, setIsHydrated] = useState(false);
 
-  const [activeCurrencies, setActiveCurrencies] = useState<CurrencyItem[]>(() => getInitialCurrencies());
-  const [usageFrequency, setUsageFrequency] = useState<Record<string, number>>(() => getInitialFrequency());
+  const [activeCurrencies, setActiveCurrencies] = useState<CurrencyItem[]>(DEFAULT_CURRENCIES);
+  const [usageFrequency, setUsageFrequency] = useState<Record<string, number>>({});
 
   const allCurrencyData: Record<string, { flag: string, symbol: string, symbolEn: string }> = {
     USD: { flag: '🇺🇸', symbol: '미국 달러', symbolEn: 'US Dollar' },
@@ -109,6 +81,27 @@ export default function Home() {
   };
 
   useEffect(() => {
+    const storedCurrencies = localStorage.getItem(STORAGE_KEY_CURRENCIES);
+    const storedFrequency = localStorage.getItem(STORAGE_KEY_FREQUENCY);
+    
+    if (storedCurrencies) {
+      try {
+        const parsed = JSON.parse(storedCurrencies) as CurrencyItem[];
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setActiveCurrencies(parsed);
+        }
+      } catch { }
+    }
+    
+    if (storedFrequency) {
+      try {
+        const parsed = JSON.parse(storedFrequency) as Record<string, number>;
+        if (typeof parsed === 'object' && parsed !== null) {
+          setUsageFrequency(parsed);
+        }
+      } catch { }
+    }
+    
     setIsHydrated(true);
   }, []);
 
