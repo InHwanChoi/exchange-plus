@@ -1,26 +1,24 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-  --ios-blue: #007AFF;
-  --ios-red: #FF3B30;
-  --ios-green: #34C759;
-  --ios-background: #F2F2F7;
-  --ios-card: #FFFFFF;
-  --ios-separator: rgba(60, 60, 67, 0.36);
-  --ios-separator-light: rgba(60, 60, 67, 0.12);
-}
-
-body {
-  color: #000000;
-  background: var(--ios-background);
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@theme {
+  --color-ios-blue: #007AFF;
+  --color-ios-red: #FF3B30;
+  --color-ios-green: #34C759;
+  --color-ios-background: #F2F2F7;
+  --color-ios-card: #FFFFFF;
+  --color-ios-separator: rgba(60, 60, 67, 0.36);
+  --color-ios-separator-light: rgba(60, 60, 67, 0.12);
 }
 
 @layer base {
+  body {
+    color: #000000;
+    background: var(--color-ios-background);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
   button {
     @apply select-none touch-manipulation;
   }
