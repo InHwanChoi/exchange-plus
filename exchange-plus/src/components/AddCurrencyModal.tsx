@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 interface AddCurrencyModalProps {
   isOpen: boolean;
@@ -37,33 +37,28 @@ const AddCurrencyModal: React.FC<AddCurrencyModalProps> = ({ isOpen, onClose, on
             <div className="w-[36px] h-[5px] bg-[#C5C5C7] rounded-full" />
           </div>
           <div className="px-4 pb-3 flex items-center justify-between">
-            <div className="w-[60px]" />
-            <h3 className="text-[17px] font-semibold text-black">통화 추가</h3>
+            <div className="w-[50px] shrink-0" />
+            <h3 className="text-[17px] font-semibold text-black whitespace-nowrap">통화 추가</h3>
             <button 
               onClick={() => {
                 setSearch('');
                 onClose();
               }} 
-              className="w-[60px] text-right text-[17px] text-[#007AFF] active:opacity-50"
+              className="w-[50px] shrink-0 text-right text-[17px] text-[#007AFF] active:opacity-50 whitespace-nowrap"
             >
               취소
             </button>
           </div>
           
           <div className="px-4 pb-3">
-            <div className="relative">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8E8E93]">
-                <Search className="w-4 h-4" />
-              </div>
-              <input
-                type="text"
-                placeholder="검색"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 bg-[#767680]/15 rounded-[10px] text-[17px] text-black placeholder-[#8E8E93] outline-none focus:bg-[#767680]/20 transition-colors"
-                autoFocus
-              />
-            </div>
+            <input
+              type="text"
+              placeholder="검색"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full px-4 py-2 bg-[#767680]/15 rounded-[10px] text-[17px] text-black placeholder-[#8E8E93] outline-none focus:bg-[#767680]/20 transition-colors text-center"
+              autoFocus
+            />
           </div>
         </div>
         

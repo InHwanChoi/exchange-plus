@@ -1,13 +1,62 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import Header from '@/components/Header';
 import CurrencyRow from '@/components/CurrencyRow';
 import Keypad from '@/components/Keypad';
-import BottomNav from '@/components/BottomNav';
 import AdBanner from '@/components/AdBanner';
 import AddCurrencyModal from '@/components/AddCurrencyModal';
 import { Plus } from 'lucide-react';
+
+const STORAGE_KEY_CURRENCIES = 'exchange-plus-currencies';
+const STORAGE_KEY_FREQUENCY = 'exchange-plus-frequency';
+const MAX_FREQUENT_CURRENCIES = 5;
+const FREQUENCY_BOOST = 10;
+const FREQUENCY_DECAY = 1;
+const BASE_CURRENCY = 'KRW';
+
+interface CurrencyItem {
+  flag: string;
+  code: string;
+  symbol: string;
+}
+
+const DEFAULT_CURRENCIES: CurrencyItem[] = [
+  { flag: '🇺🇸', code: 'USD', symbol: 'US 달러' },
+  { flag: '🇭🇰', code: 'HKD', symbol: '홍콩 달러' },
+  { flag: '🇲🇴', code: 'MOP', symbol: '마카오 파타카' },
+  { flag: '🇨🇳', code: 'CNY', symbol: '중국 위안' },
+  { flag: '🇰🇷', code: 'KRW', symbol: '대한민국 원' },
+  { flag: '🇯🇵', code: 'JPY', symbol: '일본 엔' },
+];
+
+function getInitialCurrencies(): CurrencyItem[] {
+  if (typeof window === 'undefined') return DEFAULT_CURRENCIES;
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY_CURRENCIES);
+    if (stored) {
+      const parsed = JSON.parse(stored) as CurrencyItem[];
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+  } catch { }
+  return DEFAULT_CURRENCIES;
+}
+
+function getInitialFrequency(): Record<string, number> {
+  if (typeof window === 'undefined') return {};
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY_FREQUENCY);
+    if (stored) {
+      const parsed = JSON.parse(stored) as Record<string, number>;
+      if (typeof parsed === 'object' && parsed !== null) {
+        return parsed;
+      }
+    }
+  } catch { }
+  return {};
+}
 
 export default function Home() {
   const [selectedCode, setSelectedCode] = useState('USD');
@@ -18,15 +67,10 @@ export default function Home() {
     USD: 1, CNY: 7.24, KRW: 1446.55, JPY: 158.46, EUR: 0.96, HKD: 7.78, MOP: 8.02,
   });
   const [lastUpdate, setLastUpdate] = useState('...');
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  const [activeCurrencies, setActiveCurrencies] = useState([
-    { flag: '🇺🇸', code: 'USD', symbol: 'US 달러' },
-    { flag: '🇭🇰', code: 'HKD', symbol: '홍콩 달러' },
-    { flag: '🇲🇴', code: 'MOP', symbol: '마카오 파타카' },
-    { flag: '🇨🇳', code: 'CNY', symbol: '중국 위안' },
-    { flag: '🇰🇷', code: 'KRW', symbol: '대한민국 원' },
-    { flag: '🇯🇵', code: 'JPY', symbol: '일본 엔' },
-  ]);
+  const [activeCurrencies, setActiveCurrencies] = useState<CurrencyItem[]>(() => getInitialCurrencies());
+  const [usageFrequency, setUsageFrequency] = useState<Record<string, number>>(() => getInitialFrequency());
 
   const allCurrencyData: Record<string, { flag: string, symbol: string, symbolEn: string }> = {
     USD: { flag: '🇺🇸', symbol: '미국 달러', symbolEn: 'US Dollar' },
@@ -66,6 +110,20 @@ export default function Home() {
   };
 
   useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+    localStorage.setItem(STORAGE_KEY_CURRENCIES, JSON.stringify(activeCurrencies));
+  }, [activeCurrencies, isHydrated]);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+    localStorage.setItem(STORAGE_KEY_FREQUENCY, JSON.stringify(usageFrequency));
+  }, [usageFrequency, isHydrated]);
+
+  useEffect(() => {
     const fetchRates = async () => {
       try {
         const response = await fetch('https://open.er-api.com/v6/latest/USD');
@@ -77,12 +135,61 @@ export default function Home() {
             month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false
           }));
         }
-      } catch (e) {
+      } catch {
         setLastUpdate('Offline');
       }
     };
     fetchRates();
   }, []);
+
+  const boostFrequency = useCallback((code: string) => {
+    if (code === BASE_CURRENCY) return;
+    setUsageFrequency(prev => ({
+      ...prev,
+      [code]: (prev[code] || 0) + FREQUENCY_BOOST
+    }));
+  }, []);
+
+  const applyDecay = useCallback(() => {
+    setUsageFrequency(prev => {
+      const updated: Record<string, number> = {};
+      for (const [code, freq] of Object.entries(prev)) {
+        const newFreq = Math.max(0, freq - FREQUENCY_DECAY);
+        if (newFreq > 0) {
+          updated[code] = newFreq;
+        }
+      }
+      return updated;
+    });
+  }, []);
+
+  const sortedCurrencies = useMemo(() => {
+    const baseCurrency = activeCurrencies.find(c => c.code === BASE_CURRENCY);
+    const otherCurrencies = activeCurrencies.filter(c => c.code !== BASE_CURRENCY);
+    
+    const withFrequency = otherCurrencies.map(c => ({
+      ...c,
+      frequency: usageFrequency[c.code] || 0
+    }));
+    
+    const frequentCurrencies = withFrequency
+      .filter(c => c.frequency > 0)
+      .sort((a, b) => b.frequency - a.frequency)
+      .slice(0, MAX_FREQUENT_CURRENCIES);
+    
+    const frequentCodes = new Set(frequentCurrencies.map(c => c.code));
+    
+    const alphabeticalCurrencies = withFrequency
+      .filter(c => !frequentCodes.has(c.code))
+      .sort((a, b) => a.code.localeCompare(b.code));
+    
+    const result: CurrencyItem[] = [];
+    if (baseCurrency) result.push(baseCurrency);
+    result.push(...frequentCurrencies);
+    result.push(...alphabeticalCurrencies);
+    
+    return result;
+  }, [activeCurrencies, usageFrequency]);
 
   const handleKeyPress = (key: string) => {
     if (key === 'C') return setInputValue('0');
@@ -106,6 +213,13 @@ export default function Home() {
     if (activeCurrencies.find(c => c.code === code)) return;
     const data = allCurrencyData[code] || { flag: '🏳️', symbol: code };
     setActiveCurrencies(prev => [...prev, { code, ...data }]);
+    boostFrequency(code);
+  };
+
+  const handleCurrencySelect = (code: string) => {
+    setSelectedCode(code);
+    boostFrequency(code);
+    applyDecay();
   };
 
   const formatValue = (code: string) => {
@@ -131,15 +245,18 @@ export default function Home() {
         />
         
         <div className="flex-1 overflow-y-auto relative z-10 pt-2 pb-6">
+          <p className="text-center text-[11px] text-[#8E8E93] py-1">
+            자주 사용하는 통화 우선 표시
+          </p>
           <div className="flex flex-col bg-white border-y border-[rgba(60,60,67,0.12)]">
-            {activeCurrencies.map(curr => (
+            {sortedCurrencies.map(curr => (
               <CurrencyRow
                 key={curr.code}
                 {...curr}
                 value={formatValue(curr.code)}
                 isSelected={curr.code === selectedCode}
                 isEditMode={isEditMode}
-                onClick={() => setSelectedCode(curr.code)}
+                onClick={() => handleCurrencySelect(curr.code)}
                 onDelete={() => deleteCurrency(curr.code)}
               />
             ))}
@@ -149,6 +266,7 @@ export default function Home() {
             <button 
               onClick={() => setIsModalOpen(true)}
               className="w-full py-3 flex items-center justify-center gap-2 bg-white text-[#007AFF] active:bg-[#E5E5EA] rounded-xl shadow-sm transition-colors"
+              style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Rounded", "SF Pro Text", sans-serif' }}
             >
               <Plus className="w-5 h-5" strokeWidth={2.5} />
               <span className="font-semibold text-[17px]">통화 추가</span>
