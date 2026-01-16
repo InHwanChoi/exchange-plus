@@ -27,7 +27,6 @@ const DEFAULT_CURRENCIES: CurrencyItem[] = [
   { flag: '🇲🇴', code: 'MOP', symbol: '마카오 파타카' },
   { flag: '🇨🇳', code: 'CNY', symbol: '중국 위안' },
   { flag: '🇰🇷', code: 'KRW', symbol: '대한민국 원' },
-  { flag: '🇯🇵', code: 'JPY', symbol: '일본 엔' },
 ];
 
 function getInitialCurrencies(): CurrencyItem[] {
