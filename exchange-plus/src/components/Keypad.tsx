@@ -47,20 +47,24 @@ const Keypad: React.FC<KeypadProps> = ({ onKeyPress }) => {
   };
 
   return (
-    <div className="pb-0 pt-3 px-3 bg-[#F2F2F7]">
-      <div className="flex flex-col gap-[12px] max-w-[360px] mx-auto">
+    <div className="pb-0 pt-2 px-2 bg-[#F2F2F7]">
+      <div className="flex flex-col max-w-[320px] mx-auto" style={{ gap: 'var(--keypad-gap)' }}>
         {rows.map((row, rowIndex) => (
-          <div key={rowIndex} className="flex gap-[12px] justify-end">
+          <div key={rowIndex} className="flex justify-end" style={{ gap: 'var(--keypad-gap)' }}>
             {row.map((btn, btnIndex) => (
               <button
                 key={btnIndex}
                 onClick={() => btn.type !== 'empty' && onKeyPress(btn.label)}
                 className={`
-                  ${btn.type === 'zero' ? 'w-[164px] rounded-full justify-start pl-8' : 'w-[75px] rounded-full justify-center'}
-                  h-[75px] flex items-center
-                  text-[32px] font-light transition-colors duration-75 touch-manipulation select-none
+                  ${btn.type === 'zero' ? 'rounded-full justify-start pl-6' : 'rounded-full justify-center'}
+                  flex items-center
+                  text-[26px] font-light transition-colors duration-75 touch-manipulation select-none
                   ${getButtonStyle(btn.type)}
                 `}
+                style={{ 
+                  height: 'var(--keypad-btn-height)',
+                  width: btn.type === 'zero' ? 'calc(var(--keypad-btn-height) * 2.2)' : 'var(--keypad-btn-height)'
+                }}
               >
                 {btn.icon ? btn.icon : btn.label}
               </button>

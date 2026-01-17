@@ -10,6 +10,14 @@
   --color-ios-separator-light: rgba(60, 60, 67, 0.12);
 }
 
+:root {
+  --row-height: clamp(44px, 8dvh, 60px);
+  --keypad-btn-height: clamp(48px, 9dvh, 75px);
+  --keypad-gap: clamp(6px, 1.2dvh, 12px);
+  --font-value: clamp(20px, 4dvh, 28px);
+  --font-flag: clamp(24px, 4.5dvh, 32px);
+}
+
 @layer base {
   body {
     color: #000000;
