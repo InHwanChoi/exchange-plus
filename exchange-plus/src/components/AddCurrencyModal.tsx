@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
 
 interface AddCurrencyModalProps {
@@ -11,6 +11,18 @@ interface AddCurrencyModalProps {
 
 const AddCurrencyModal: React.FC<AddCurrencyModalProps> = ({ isOpen, onClose, onAdd, availableCodes, allCurrencyData }) => {
   const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        setSearch('');
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -98,4 +110,3 @@ const AddCurrencyModal: React.FC<AddCurrencyModalProps> = ({ isOpen, onClose, on
 };
 
 export default AddCurrencyModal;
-

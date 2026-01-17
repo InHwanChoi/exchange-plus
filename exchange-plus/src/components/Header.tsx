@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({ onEditToggle, isEditMode }) => {
         
         <button 
           onClick={onEditToggle}
-          className="text-[17px] text-[#007AFF] active:opacity-50 transition-opacity cursor-pointer min-w-[44px] text-right"
+          className="text-[17px] font-semibold text-[#007AFF] active:opacity-50 transition-opacity cursor-pointer min-w-[44px] text-right"
           style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Rounded", "SF Pro Text", sans-serif' }}
         >
           {isEditMode ? '완료' : '편집'}

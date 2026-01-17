@@ -32,6 +32,7 @@ const DEFAULT_CURRENCIES: CurrencyItem[] = [
 export default function Home() {
   const [selectedCode, setSelectedCode] = useState('USD');
   const [inputValue, setInputValue] = useState('1');
+  const [isReplacing, setIsReplacing] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rates, setRates] = useState<Record<string, number>>({
@@ -116,6 +117,20 @@ export default function Home() {
   }, [usageFrequency, isHydrated]);
 
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (isModalOpen) {
+          setIsModalOpen(false);
+        } else if (isEditMode) {
+          setIsEditMode(false);
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isModalOpen, isEditMode]);
+
+  useEffect(() => {
     const fetchRates = async () => {
       try {
         const response = await fetch('https://open.er-api.com/v6/latest/USD');
@@ -184,12 +199,27 @@ export default function Home() {
   }, [activeCurrencies, usageFrequency]);
 
   const handleKeyPress = (key: string) => {
-    if (key === 'C') return setInputValue('0');
-    if (key === 'Back') return setInputValue(prev => prev.length > 1 ? prev.slice(0, -1) : '0');
+    if (key === 'C') {
+      setIsReplacing(false);
+      return setInputValue('0');
+    }
+    if (key === 'Back') {
+      setIsReplacing(false);
+      return setInputValue(prev => prev.length > 1 ? prev.slice(0, -1) : '0');
+    }
+    
+    if (isReplacing) {
+      if (key === '.') {
+        setInputValue('0.');
+      } else if (/[0-9]/.test(key)) {
+        setInputValue(key);
+      }
+      setIsReplacing(false);
+      return;
+    }
+
     if (key === '.') return setInputValue(prev => prev.includes('.') ? prev : prev + '.');
     if (/[0-9]/.test(key)) return setInputValue(prev => prev === '0' ? key : prev + key);
-    if (key === 'Swap') {
-    }
   };
 
   const deleteCurrency = (code: string) => {
@@ -210,6 +240,7 @@ export default function Home() {
 
   const handleCurrencySelect = (code: string) => {
     setSelectedCode(code);
+    setIsReplacing(true);
     boostFrequency(code);
     applyDecay();
   };
@@ -286,5 +317,4 @@ export default function Home() {
       </div>
     </main>
   );
-
 }

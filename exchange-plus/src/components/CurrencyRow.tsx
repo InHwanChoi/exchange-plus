@@ -40,13 +40,13 @@ const CurrencyRow: React.FC<CurrencyRowProps> = ({
         </button>
       </div>
 
-      <div className="flex-1 flex items-center py-3 pr-4 ml-4 border-b border-[rgba(60,60,67,0.12)] min-h-[76px]">
-        <div className="w-[48px] text-[40px] leading-none flex items-center justify-center mr-3 shrink-0">
+      <div className="flex-1 flex items-center py-2 pr-4 ml-4 border-b border-[rgba(60,60,67,0.12)] min-h-[60px]">
+        <div className="w-[48px] text-[32px] leading-none flex items-center justify-center mr-3 shrink-0">
           {flag}
         </div>
         
         <div className="flex flex-col mr-auto">
-          <span className={`text-[17px] font-semibold tracking-tight ${isSelected ? 'text-black' : 'text-black'}`}>
+          <span className="text-[17px] font-semibold tracking-tight text-black">
             {code}
           </span>
           <span className="text-[13px] text-[#8E8E93] font-normal leading-tight mt-0.5">
@@ -69,4 +69,3 @@ const CurrencyRow: React.FC<CurrencyRowProps> = ({
 };
 
 export default CurrencyRow;
-
