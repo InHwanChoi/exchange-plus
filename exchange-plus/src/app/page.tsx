@@ -6,7 +6,6 @@ import CurrencyRow from '@/components/CurrencyRow';
 import Keypad from '@/components/Keypad';
 import AdBanner from '@/components/AdBanner';
 import AddCurrencyModal from '@/components/AddCurrencyModal';
-import { Plus } from 'lucide-react';
 
 const STORAGE_KEY_CURRENCIES = 'exchange-plus-currencies';
 const STORAGE_KEY_FREQUENCY = 'exchange-plus-frequency';
@@ -239,10 +238,16 @@ export default function Home() {
   };
 
   const handleCurrencySelect = (code: string) => {
+    if (code === selectedCode) return;
+    
+    const currentValue = parseFloat(inputValue) || 0;
+    const valueInUSD = currentValue / (rates[selectedCode] || 1);
+    const newValue = valueInUSD * (rates[code] || 1);
+    const formatted = newValue.toFixed(2).replace(/\.?0+$/, '');
+    
+    setInputValue(formatted || '0');
     setSelectedCode(code);
     setIsReplacing(true);
-    boostFrequency(code);
-    applyDecay();
   };
 
   const formatValue = (code: string) => {
@@ -264,13 +269,11 @@ export default function Home() {
         
         <Header 
           isEditMode={isEditMode} 
-          onEditToggle={() => setIsEditMode(!isEditMode)} 
+          onEditToggle={() => setIsEditMode(!isEditMode)}
+          onAddCurrency={() => setIsModalOpen(true)}
         />
         
         <div className="flex-1 overflow-y-auto relative z-10 pt-2 pb-6">
-          <p className="text-center text-[11px] text-[#8E8E93] py-1">
-            자주 사용하는 통화 우선 표시
-          </p>
           <div className="flex flex-col bg-white border-y border-[rgba(60,60,67,0.12)]">
             {sortedCurrencies.map(curr => (
               <CurrencyRow
@@ -278,6 +281,7 @@ export default function Home() {
                 {...curr}
                 value={formatValue(curr.code)}
                 isSelected={curr.code === selectedCode}
+                isReplacing={curr.code === selectedCode && isReplacing}
                 isEditMode={isEditMode}
                 onClick={() => handleCurrencySelect(curr.code)}
                 onDelete={() => deleteCurrency(curr.code)}
@@ -286,26 +290,17 @@ export default function Home() {
           </div>
           
           <div className="px-4 mt-4 mb-4">
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              className="w-full py-3 flex items-center justify-center gap-2 bg-white text-[#007AFF] active:bg-[#E5E5EA] rounded-xl shadow-sm transition-colors"
-              style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Rounded", "SF Pro Text", sans-serif' }}
-            >
-              <Plus className="w-5 h-5" strokeWidth={2.5} />
-              <span className="font-semibold text-[17px]">통화 추가</span>
-            </button>
-            
-            <p className="text-center text-[11px] text-[#8E8E93] mt-3">
+            <p className="text-center text-[11px] text-[#8E8E93]">
               마지막 업데이트: {lastUpdate}
             </p>
           </div>
-          
-          <AdBanner />
         </div>
 
         <div className="relative z-20">
           <Keypad onKeyPress={handleKeyPress} />
         </div>
+
+        <AdBanner />
 
         <AddCurrencyModal 
           isOpen={isModalOpen}

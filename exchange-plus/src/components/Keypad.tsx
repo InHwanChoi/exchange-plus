@@ -47,7 +47,7 @@ const Keypad: React.FC<KeypadProps> = ({ onKeyPress }) => {
   };
 
   return (
-    <div className="pb-10 pt-3 px-3 bg-[#F2F2F7]">
+    <div className="pb-0 pt-3 px-3 bg-[#F2F2F7]">
       <div className="flex flex-col gap-[12px] max-w-[360px] mx-auto">
         {rows.map((row, rowIndex) => (
           <div key={rowIndex} className="flex gap-[12px] justify-end">

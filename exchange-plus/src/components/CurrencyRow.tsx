@@ -7,13 +7,14 @@ interface CurrencyRowProps {
   symbol: string;
   value: string;
   isSelected?: boolean;
+  isReplacing?: boolean;
   isEditMode?: boolean;
   onClick?: () => void;
   onDelete?: () => void;
 }
 
 const CurrencyRow: React.FC<CurrencyRowProps> = ({ 
-  flag, code, symbol, value, isSelected, isEditMode, onClick, onDelete 
+  flag, code, symbol, value, isSelected, isReplacing, isEditMode, onClick, onDelete 
 }) => {
   return (
     <div 
@@ -56,9 +57,11 @@ const CurrencyRow: React.FC<CurrencyRowProps> = ({
 
         <div className="text-right shrink-0">
           <div className={`text-[28px] font-light tracking-tight tabular-nums ${
-            isSelected 
-              ? 'text-[#007AFF]' 
-              : 'text-black'
+            isSelected && isReplacing
+              ? 'text-white bg-[#007AFF] px-2 py-0.5 rounded-md'
+              : isSelected 
+                ? 'text-[#007AFF]' 
+                : 'text-black'
           }`}>
             {value}
           </div>

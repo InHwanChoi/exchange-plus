@@ -2,7 +2,7 @@ import React from 'react';
 
 const AdBanner = () => {
   return (
-    <div className="mx-4 my-8 p-4 bg-white rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
+    <div className="mx-4 mt-[6px] mb-8 p-4 bg-white rounded-xl shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-[15px] font-semibold text-black">
